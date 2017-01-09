@@ -1,3 +1,2 @@
 ﻿  MouseCMain.cpp
-  MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\Debug\MouseC.exe
-  MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\Debug\MouseC.pdb (Full PDB)
+opencv_world320d.lib(opencv_world320d.dll) : fatal error LNK1112: module machine type 'x64' conflicts with target machine type 'X86'
