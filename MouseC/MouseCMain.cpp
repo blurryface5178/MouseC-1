@@ -1,4 +1,4 @@
-#include "CameraInterface.h"
+#include"CameraInterface.h"
 #include"ColorCodecConversion.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
@@ -14,10 +14,11 @@ void dispose(CameraInterface*);
 int main() 
 {
 	CameraInterface *cI = new CameraInterface(0, 480, 360);
-	ColorCodecConversion *ccConversion = new ColorCodecConversion(cI);
-	ccConversion->bgrToHSB();
+	
 
 	dispose(cI);
+
+	return 0;
 }
 
 

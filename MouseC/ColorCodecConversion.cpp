@@ -1,4 +1,4 @@
-#include "ColorCodecConversion.h"
+#include"ColorCodecConversion.h"
 #include"CameraInterface.h"
 #include<opencv2\opencv.hpp>
 #include<opencv2\core\core.hpp>
@@ -7,7 +7,8 @@
 #include<iostream>
 
 using namespace cv;
-
+using namespace std;
+	
 ColorCodecConversion::ColorCodecConversion()
 {
 
@@ -15,32 +16,19 @@ ColorCodecConversion::ColorCodecConversion()
 
 }
 
-ColorCodecConversion::ColorCodecConversion(CameraInterface *cI)
+
+
+void ColorCodecConversion::bgrToHSB(Mat bgr)
 {
 
-	this->cI = cI;
-	capture = (this->cI)->getVideoCapture();
-	
 
-}
+	cvtColor(bgr, hsv, CV_BGR2HSV);
+	inRange(hsv, Scalar(0, 0,0), Scalar(0, 0,0), threshold);
+	namedWindow("HSV video");
+	namedWindow("Filter video");
+	imshow("HSV video", hsv);
+	imshow("Filter video", threshold);
 
-void ColorCodecConversion::bgrToHSB()
-{
-	while (true)
-	{
-		capture->read(bgr);
-		
-		cvtColor(bgr, hsv, CV_BGR2HSV);
-		inRange(hsv, Scalar(0, 255), Scalar(0, 255), threshold);
-		namedWindow("HSV video");
-		namedWindow("Filter video");
-		imshow("HSV video", hsv);
-		imshow("Filter video", threshold);
-		if (waitKey(30) == 27)
-		{
-			break;
-		}
-	}
 }
 
 

@@ -15,16 +15,15 @@ using namespace std;
 class ColorCodecConversion
 {
 private:
-	CameraInterface *cI;
 	VideoCapture *capture;
-	Mat bgr, hsv;
+	Mat hsv;
 	Mat threshold;
 
 
 public:
 	ColorCodecConversion();
-	ColorCodecConversion(CameraInterface *cI);
-	void bgrToHSB();
+
+	void bgrToHSB(Mat bgr);
 	~ColorCodecConversion();
 
 

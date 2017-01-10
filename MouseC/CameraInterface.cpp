@@ -1,4 +1,5 @@
 #include "CameraInterface.h"
+#include"ColorCodecConversion.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
@@ -29,6 +30,7 @@ VideoCapture *CameraInterface::getVideoCapture()
 	}
 	else {
 		cout << "VideoCapture is currently not allocated" << endl;
+		return NULL;
 	}
 }
 
@@ -43,15 +45,19 @@ CameraInterface::~CameraInterface()
 
 bool CameraInterface::openCamera(int id, int frame_width, int frameHeight)
 {
+	ColorCodecConversion *ccConversion = new ColorCodecConversion();
 	stream = new VideoCapture;
 	(*stream).open(id);
 	(*stream).set(CAP_PROP_FRAME_WIDTH, frame_width);
 	(*stream).set(CAP_PROP_FRAME_HEIGHT, frame_height);
 	(*stream).set(CV_CAP_PROP_FPS, frame_rate);
-	while (true)
+	while (true)	
 	{
+		
 		(*stream).read(img);
 		flip(img, img, 180);
+
+		ccConversion->bgrToHSB(img);
 		cvtColor(img, img, CV_BGR2BGRA);
 		double fps = (*stream).get(CV_CAP_PROP_FPS);
 		putText(img, to_string(fps), cvPoint(30, 30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200, 200, 250), 1, CV_AA);

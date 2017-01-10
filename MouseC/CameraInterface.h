@@ -1,5 +1,6 @@
 #pragma once
 #include "CameraInterface.h"
+#include"ColorCodecConversion.h"   
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
@@ -20,6 +21,8 @@ private:
 	Mat img,hsv,threshold;
 	CameraInterface *cf;
 	
+
+
 
 public:
 	CameraInterface();
