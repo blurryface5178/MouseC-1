@@ -21,9 +21,15 @@
     <ClCompile Include="CameraInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ColorCodecConversion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorCodecConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

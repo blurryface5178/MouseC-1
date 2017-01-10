@@ -1,5 +1,7 @@
-﻿  MouseCMain.cpp
-  CameraInterface.cpp
+﻿  ColorCodecConversion.cpp
+  Generating Code...
+  Compiling...
+  MouseCMain.cpp
   Generating Code...
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)
