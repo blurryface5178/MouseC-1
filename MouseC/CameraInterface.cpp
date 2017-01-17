@@ -1,5 +1,4 @@
 #include "CameraInterface.h"
-#include"ColorCodecConversion.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
@@ -23,73 +22,77 @@ CameraInterface::CameraInterface(int id, int frame_width, int frame_height)
 
 }
 
-VideoCapture *CameraInterface::getVideoCapture()
-{
-	if (stream != NULL) {
-		return stream;
-	}
-	else {
-		cout << "VideoCapture is currently not allocated" << endl;
-		return NULL;
-	}
-}
+
 
 
 CameraInterface::~CameraInterface()
 {
 	
-	delete stream;
 }
 
 
 
 bool CameraInterface::openCamera(int id, int frame_width, int frameHeight)
 {
-	ColorCodecConversion *ccConversion = new ColorCodecConversion();
-	stream = new VideoCapture;
-	(*stream).open(id);
-	(*stream).set(CAP_PROP_FRAME_WIDTH, frame_width);
-	(*stream).set(CAP_PROP_FRAME_HEIGHT, frame_height);
-	(*stream).set(CV_CAP_PROP_FPS, frame_rate);
+	createTrackBar();
+	cap.open(id);
+	cap.set(CAP_PROP_FRAME_WIDTH, frame_width);
+	cap.set(CAP_PROP_FRAME_HEIGHT, frame_height);
+	cap.set(CV_CAP_PROP_FPS, frame_rate);
 	while (true)	
 	{
 		
-		(*stream).read(img);
+		cap.read(img);
 		flip(img, img, 180);
-
-		ccConversion->bgrToHSB(img);
+		BGRtoHSV(img);
 		cvtColor(img, img, CV_BGR2BGRA);
-		double fps = (*stream).get(CV_CAP_PROP_FPS);
+		double fps = cap.get(CV_CAP_PROP_FPS);
 		putText(img, to_string(fps), cvPoint(30, 30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200, 200, 250), 1, CV_AA);
 		namedWindow("MouseC");
 		imshow("MouseC", img);
 
-/*
-		cvtColor(img, hsv, CV_BGR2HSV);
-		inRange(hsv, Scalar(0, 0,0), Scalar(0, 0,0), threshold);
-		namedWindow("HSV video");
-		namedWindow("Filter video");
-		imshow("HSV video", hsv);
-		imshow("Filter video", threshold);
-	
-	*/
+
 	if (waitKey(20) == 27) {
 			break;
 		}
-
-		
-			
-		
-
-
 	}
 
 	return false;
 }
  
-Mat CameraInterface::getBGR() 
+
+
+void CameraInterface::BGRtoHSV(Mat img) {
+	Mat hsv, threshold;
+	cvtColor(img, hsv, CV_BGR2YCrCb);
+	inRange(hsv, Scalar(H_MIN, S_MIN, V_MIN), Scalar(H_MAX, S_MAX, V_MAX), threshold);
+	namedWindow("HSV video");
+	namedWindow("Filter video");
+	imshow("HSV video", hsv);
+	imshow("Filter video", threshold);
+}
+
+void CameraInterface::cropCaughtHand(int x, int y, int width, int height)
 {
-	return img;
+	Rect croppedSize = Rect(x, y, width, height);
+	croppedImage = img(croppedImage);
+	
+}
+
+void CameraInterface::createTrackBar()
+{
+	namedWindow(trackbarWindowName);
+
+	createTrackbar("H_MIN", trackbarWindowName, &H_MIN, 255);
+	createTrackbar("H_MAX", trackbarWindowName, &H_MAX, 255);
+	createTrackbar("S_MIN", trackbarWindowName, &S_MIN, 255);
+	createTrackbar("S_MAX", trackbarWindowName, &S_MAX, 255);
+	createTrackbar("V_MIN", trackbarWindowName, &V_MIN, 255);
+	createTrackbar("V_MAX", trackbarWindowName, &V_MAX, 255);
 
 }
+
+
+
+
 
