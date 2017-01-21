@@ -2,6 +2,8 @@
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
+#include<opencv2\imgproc\imgproc.hpp>
+
 #include<iostream>
 
 
@@ -12,16 +14,11 @@ void dispose(CameraInterface*);
 
 int main()
 {
-	CameraInterface *cI = new CameraInterface(0, 480, 360);
+	CameraInterface cI(0, 480, 360);
 
 
-	dispose(cI);
 
 	return 0;
 }
 
 
-void dispose(CameraInterface *cI) {
-
-	delete cI;
-}

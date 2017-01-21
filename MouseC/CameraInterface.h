@@ -3,6 +3,8 @@
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
+#include<opencv2\imgproc\imgproc.hpp>
+
 #include<iostream>
 
 using namespace cv;
@@ -22,6 +24,11 @@ private:
 	int H_MAX = 256;
 	int S_MAX = 256;
 	int V_MAX = 256;
+	int ERODEMAX = 21;
+	int ERODEMIN = 0;
+	int DILATEMIN = 0;
+	int DILATEMAX = 21;
+	vector<int> H_ROI, S_ROI, V_ROI;
 	const String trackbarWindowName = "Trackbar";
 	VideoCapture cap;
 
@@ -34,13 +41,17 @@ private:
 public:
 	CameraInterface();
 	CameraInterface(int id, int frame_width, int frame_height);
+	void createTrackBars();
+	void extractPixelColor();
+	void storePixelValue(Mat, int x, int y, int width, int height);
 	~CameraInterface();
 
 private:
 	bool openCamera(int id, int frame_width, int frame_height);
-	void BGRtoHSV(Mat img);
-	void cropCaughtHand(int x, int y, int width, int height);
-	void createTrackBar();
+	void BGRtoHSV(Mat image);
+	Mat ROI(int x, int y, int width, int height);
+	void morphologicalErode(Mat &thres);
+	void morphologicalDilate(Mat &thres);
 
 
 };

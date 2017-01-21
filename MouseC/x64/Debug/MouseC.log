@@ -1,8 +1,4 @@
 ﻿  MouseCMain.cpp
-g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(38): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(256): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(269): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(270): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   CameraInterface.cpp
   Generating Code...
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
