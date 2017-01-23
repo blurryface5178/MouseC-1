@@ -79,13 +79,13 @@ void CameraInterface::BGRtoHSV(Mat image) {
 Mat CameraInterface::ROI(int x, int y, int width, int height)
 {
 	Rect croppedSize = Rect(x, y, width, height);
-	croppedImage = img(croppedImage);
+	croppedImage = img(croppedSize);
 	return croppedImage;
 }
 
 void CameraInterface::createTrackBars()
 {
-	namedWindow(trackbarWindowName);
+	namedWindow(trackbarWindowName, WINDOW_FREERATIO);
 
 	createTrackbar("H_MIN", trackbarWindowName, &H_MIN, 255);
 	createTrackbar("H_MAX", trackbarWindowName, &H_MAX, 255);
@@ -100,9 +100,19 @@ void CameraInterface::createTrackBars()
 
 void CameraInterface::extractPixelColor()
 {
-	if (H_ROI.size > 0) {
-		H_MIN = min_element(H_ROI.begin, H_ROI.end);
-		H_MAX = max_element(H_ROI.begin, H_ROI.end);
+	if (H_ROI.size() > 0) {
+		H_MIN = *min_element(H_ROI.begin(), H_ROI.end());
+		H_MAX = *max_element(H_ROI.begin(), H_ROI.end());
+	}
+
+	if (S_ROI.size() > 0) {
+		S_MIN = *min_element(S_ROI.begin(), S_ROI.end());
+		S_MAX = *max_element(S_ROI.begin(), S_ROI.end());
+	}
+
+	if (V_ROI.size() > 0) {
+		V_MIN = *min_element(V_ROI.begin(), V_ROI.end());
+		V_MAX = *max_element(V_ROI.begin(), V_ROI.end());
 	}
 
 
@@ -111,12 +121,12 @@ void CameraInterface::extractPixelColor()
 
 void CameraInterface::storePixelValue(Mat hsv_pixel, int x, int y, int width, int height)
 {
-	for (int i = 0; i < x + width; i++) {
-		for (int j = 0; i < y + height; j++) {
+	for (int i = x; i < x + width; i++) {
+		for (int j = y; j < y + height; j++) {
 
-			H_ROI.push_back((int)hsv_pixel.at<Vec3b>(x ,y)[0]); 
-			S_ROI.push_back((int)hsv_pixel.at<Vec3b>(x, y)[1]);
-			V_ROI.push_back((int)hsv_pixel.at<Vec3b>(x, y)[2]);
+			H_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[0]); 
+			S_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[1]);
+			V_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[2]);
 			
 		}
 

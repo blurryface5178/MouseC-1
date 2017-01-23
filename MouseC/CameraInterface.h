@@ -8,6 +8,7 @@
 #include<iostream>
 
 using namespace cv;
+using namespace std;
 
 
 
@@ -28,7 +29,9 @@ private:
 	int ERODEMIN = 0;
 	int DILATEMIN = 0;
 	int DILATEMAX = 21;
-	vector<int> H_ROI, S_ROI, V_ROI;
+	vector<int> H_ROI;
+	vector<int> S_ROI;
+	vector<int> V_ROI;
 	const String trackbarWindowName = "Trackbar";
 	VideoCapture cap;
 
