@@ -153,10 +153,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CameraInterface.cpp" />
+    <ClCompile Include="HandDetection.cpp" />
     <ClCompile Include="MouseCMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraInterface.h" />
+    <ClInclude Include="HandDetection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

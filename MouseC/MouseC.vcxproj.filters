@@ -21,9 +21,15 @@
     <ClCompile Include="CameraInterface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HandDetection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraInterface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HandDetection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

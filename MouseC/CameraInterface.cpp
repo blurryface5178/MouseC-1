@@ -1,4 +1,5 @@
 #include "CameraInterface.h"
+#include"HandDetection.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
@@ -36,6 +37,7 @@ CameraInterface::~CameraInterface()
 bool CameraInterface::openCamera(int id, int frame_width, int frameHeight)
 {
 	createTrackBars();
+	HandDetection hd;
 	cap.open(id);
 	cap.set(CAP_PROP_FRAME_WIDTH, frame_width);
 	cap.set(CAP_PROP_FRAME_HEIGHT, frame_height);
@@ -46,6 +48,7 @@ bool CameraInterface::openCamera(int id, int frame_width, int frameHeight)
 		cap.read(img);
 		flip(img, img, 180);
 		BGRtoHSV(img);
+		hd.Detect(img);
 		double fps = cap.get(CV_CAP_PROP_FPS);
 		putText(img, to_string(fps), cvPoint(30, 30),FONT_HERSHEY_COMPLEX_SMALL, 0.8, cvScalar(200, 200, 250), 1, CV_AA);
 		namedWindow("MouseC");
