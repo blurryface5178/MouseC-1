@@ -17,10 +17,10 @@ using namespace std;
 class CameraInterface
 {
 private:
-    int id;
+	int id;
 	int frame_width = 360;
 	int frame_height = 480;
-	int frame_rate = 24;
+	int frame_rate = 5;
 	int H_MIN = 0;
 	int S_MIN = 0;
 	int V_MIN = 0;
@@ -36,9 +36,10 @@ private:
 	vector<int> V_ROI;
 	const String trackbarWindowName = "Trackbar";
 	VideoCapture cap;
+	HandDetection hd;
 
-	Mat img,hsv,threshold, croppedImage;
-	
+	Mat img, hsv, threshold, croppedImage;
+
 
 
 
@@ -48,16 +49,23 @@ public:
 	CameraInterface(int id, int frame_width, int frame_height);
 	void createTrackBars();
 	void extractPixelColor();
+	Mat ROI(Mat , int , int , int , int);
+	void morphologicalErode(Mat &thres, int &);
+	void morphologicalDilate(Mat &thres, int &);
+	Mat getImg();
+	Mat getThreshold();
 	void storePixelValue(Mat, int x, int y, int width, int height);
+	void openCamera();
+	void showVideo(Mat, String);
+	void createBlur(Mat&, int);
 	~CameraInterface();
 
 private:
-	bool openCamera(int id, int frame_width, int frame_height);
 	void BGRtoHSV(Mat image);
-	Mat ROI(int x, int y, int width, int height);
-	void morphologicalErode(Mat &thres);
-	void morphologicalDilate(Mat &thres);
+	
 
+	///static void Mouse(int event, int x, int y, int flag, void * in);
+	///void setMouse();
 
 };
 

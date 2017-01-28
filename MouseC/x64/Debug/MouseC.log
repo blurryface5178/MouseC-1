@@ -1,4 +1,6 @@
-﻿cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
-  HandDetection.cpp
+﻿  MouseCMain.cpp
+g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(100): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(101): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\mousecmain.cpp(102): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)

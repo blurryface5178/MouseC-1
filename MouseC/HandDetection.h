@@ -12,7 +12,9 @@ using namespace cv;
 class HandDetection
 {
 public:
-	String file_name = "palm.xml";
+	String file_name = "face.xml";
+	String fistxml = "fist.xml";
+	String palmxml = "palm.xml";
 	HandDetection();
 	HandDetection(Mat img);
 	~HandDetection();
