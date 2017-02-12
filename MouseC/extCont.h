@@ -10,6 +10,7 @@ using namespace cv;
 class extCont
 {
 private:
+	
 	Mat extSrc;
 	Mat gray_scale;
 	Mat gray_threshold;
@@ -24,16 +25,17 @@ private:
 	int D_MAX = 20;
 	char a[40];
 	int count = 0;
-	CameraInterface cI;
+	CameraInterface *cI;
 	vector<vector<Point> >contours;
 	vector<Vec4i>hierarchy;
 
 public:
 	extCont();
-	void beginExt(Mat);
+	void beginExt(Mat, CameraInterface*);
 	void showVideo();
 	String getText();
 	~extCont();
+	void dispose();
 
 private:
 	void createTrack();

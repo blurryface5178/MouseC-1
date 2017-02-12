@@ -11,29 +11,30 @@ using namespace cv;
 
 extCont::extCont()
 {	
-	createTrack();
+	//createTrack();
 	B_MIN = 9;
 
 }
 
-void extCont::beginExt(Mat src)
+void extCont::beginExt(Mat src, CameraInterface *cI)
 {
+	this->cI = cI;
 	extSrc = src;
-	extROI = cI.ROI(extSrc, 260, 10, 250, 250);
+	extROI = cI->ROI(&extSrc, 260, 10, 250, 250);
 	cvtColor(extROI, gray_scale, CV_RGB2GRAY);
-	cI.createBlur(gray_scale, B_MIN);
+	cI->createBlur(gray_scale, B_MIN);
 	threshold(gray_scale, gray_threshold, T_MIN, T_MAX, THRESH_BINARY_INV + THRESH_OTSU);
-	cI.morphologicalErode(gray_threshold, E_MIN);
-	cI.morphologicalDilate(gray_threshold, D_MIN);
+	cI->morphologicalErode(gray_threshold, E_MIN);
+	cI->morphologicalDilate(gray_threshold, D_MIN);
 	findingContours();
 }
 
 void extCont::showVideo()
 {
-	cI.showVideo(extSrc, "ORIGINAL");
-	cI.showVideo(extROI, "Region of Interest");
-	cI.showVideo(gray_scale, "gray");
-	cI.showVideo(gray_threshold, "threshold");
+	cI->showVideo(extSrc, "ORIGINAL");
+	cI->showVideo(extROI, "Region of Interest");
+	cI->showVideo(gray_scale, "gray");
+	cI->showVideo(gray_threshold, "threshold");
 }
 
 String extCont::getText()
@@ -45,6 +46,8 @@ String extCont::getText()
 extCont::~extCont()
 {
 }
+
+
 
 void extCont::createTrack()
 {
@@ -130,4 +133,11 @@ void extCont::findingContours()
 	
 
 
+}
+
+void extCont::dispose()
+{
+	if (cI != nullptr) {
+		delete cI;
+	}
 }

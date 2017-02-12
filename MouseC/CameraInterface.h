@@ -1,7 +1,8 @@
 #pragma once
 #include "CameraInterface.h"
 #include"HandDetection.h"
-
+#include"My_ROI.h"
+#include"CameraImage.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
 #include<opencv2\opencv.hpp>
@@ -12,12 +13,13 @@
 using namespace cv;
 using namespace std;
 
-
+extern Mat img;
 
 class CameraInterface
 {
 private:
 	int id;
+	Mat src;
 	int frame_width = 360;
 	int frame_height = 480;
 	int frame_rate = 5;
@@ -31,14 +33,20 @@ private:
 	int ERODEMIN = 0;
 	int DILATEMIN = 0;
 	int DILATEMAX = 21;
+	int INTERESTNUM = 7;
+
 	vector<int> H_ROI;
 	vector<int> S_ROI;
 	vector<int> V_ROI;
+	
 	const String trackbarWindowName = "Trackbar";
-	VideoCapture cap;
-	HandDetection hd;
+	const int square_len = 20;
+	const int NSAMPLES = 7;
+	VideoCapture *cap = new VideoCapture;
 
-	Mat img, hsv, threshold, croppedImage;
+	Mat hsv, threshold;
+	Mat croppedImage;
+	vector<My_ROI> roi;
 
 
 
@@ -46,26 +54,25 @@ private:
 
 public:
 	CameraInterface();
-	CameraInterface(int id, int frame_width, int frame_height);
+	~CameraInterface();
+
+	Mat ROI(Mat*, int, int, int, int);
+	Mat getThreshold();
 	void createTrackBars();
 	void extractPixelColor();
-	Mat ROI(Mat , int , int , int , int);
 	void morphologicalErode(Mat &thres, int &);
 	void morphologicalDilate(Mat &thres, int &);
-	Mat getImg();
-	Mat getThreshold();
 	void storePixelValue(Mat, int x, int y, int width, int height);
-	void openCamera();
 	void showVideo(Mat, String);
 	void createBlur(Mat&, int);
-	~CameraInterface();
+	void printText(Mat, string);
+	void palmPixExt(CameraImage *);
+
 
 private:
 	void BGRtoHSV(Mat image);
 	
 
-	///static void Mouse(int event, int x, int y, int flag, void * in);
-	///void setMouse();
 
 };
 

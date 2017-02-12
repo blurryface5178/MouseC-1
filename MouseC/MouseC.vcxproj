@@ -152,15 +152,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CameraImage.cpp" />
     <ClCompile Include="CameraInterface.cpp" />
     <ClCompile Include="extCont.cpp" />
     <ClCompile Include="HandDetection.cpp" />
     <ClCompile Include="MouseCMain.cpp" />
+    <ClCompile Include="My_ROI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CameraImage.h" />
     <ClInclude Include="CameraInterface.h" />
     <ClInclude Include="extCont.h" />
     <ClInclude Include="HandDetection.h" />
+    <ClInclude Include="My_ROI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -27,6 +27,12 @@
     <ClCompile Include="extCont.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="My_ROI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraImage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CameraInterface.h">
@@ -36,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="extCont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="My_ROI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraImage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
