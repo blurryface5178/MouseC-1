@@ -1,7 +1,8 @@
 #include "My_ROI.h"
-#include<opencv2\core\core.hpp>
-#include<opencv2\imgproc\imgproc.hpp>
 #include<opencv2\opencv.hpp>
+#include<opencv2\imgproc\imgproc.hpp>
+#include<opencv2\highgui\highgui.hpp>
+#include<opencv2\core\core.hpp>
 
 
 using namespace std;
@@ -24,7 +25,7 @@ My_ROI::My_ROI(Point u_corner, Point l_corner, Mat src) {
 void My_ROI::draw_rectangle(Mat src) {
 
 	rectangle(src, upper_corner, lower_corner, color, border_thickness);
-
+	//return Rect(upper_corner.x, upper_corner.y, lower_corner.x - upper_corner.x, lower_corner.y - upper_corner.y);
 }
 
 

@@ -2,6 +2,7 @@
 #include"HandDetection.h"
 #include<opencv2\core\core.hpp>
 #include<opencv2\highgui\highgui.hpp>
+#include<opencv2\imgproc\imgproc.hpp>
 #include<opencv2\opencv.hpp>
 #include<iostream>
 #include"CameraImage.h"
@@ -32,17 +33,45 @@ CameraInterface::~CameraInterface()
 
 
 
-void CameraInterface::BGRtoHSV(Mat image) {
+void CameraInterface::BGRtoHSV(CameraImage *m) {
+	for (int i = 0; i < NSAMPLES; i++)
+	{
+		inRange(m->srcLR, Scalar(HMIN[i], SMIN[i], VMIN[i]), Scalar(HMAX[i], SMAX[i], VMAX[i]), threshold);
+		channels.push_back(threshold);
+		//cout << HMIN[i]<<"," << SMIN[i]<<"," << VMIN[i]<<","<< HMAX[i]<<","<< SMAX[i]<<","<< VMAX[i];
+	}
 	
-
-	cvtColor(image, hsv, CV_BGR2HSV);
-		
-	inRange(hsv, Scalar(H_MIN, S_MIN, V_MIN), Scalar(H_MAX, S_MAX, V_MAX), threshold);
-	morphologicalErode(threshold, ERODEMIN);
-	morphologicalDilate(threshold, DILATEMIN);
-	showVideo(hsv, "HSV image");
-	showVideo(threshold, "FilterVideo");
+  mergeData(channels, m);
 }
+
+
+
+void CameraInterface::mergeData(vector<Mat> thres, CameraImage *m) {
+	m->bw = thres[0];
+
+
+	for (int i = 1; i < NSAMPLES; i++)
+	{
+		m->bw += thres[i];
+	}
+
+	
+	for (int i = 0; i < 3; i++) {
+		m->bwList.push_back(m->bw);
+	}
+
+
+	merge(m->bwList, result);
+	
+	m->bwList.clear();
+
+}
+
+Mat CameraInterface::getMergedData() {
+	return result;
+}
+
+
 
 Mat CameraInterface::ROI(Mat *roiSrc, int x, int y, int width, int height)
 {
@@ -68,18 +97,18 @@ void CameraInterface::createTrackBars()
 void CameraInterface::extractPixelColor()
 {
 	if (H_ROI.size() > 0) {
-		H_MIN = *min_element(H_ROI.begin(), H_ROI.end());
-		H_MAX = *max_element(H_ROI.begin(), H_ROI.end());
+		HMIN.push_back(*min_element(H_ROI.begin(), H_ROI.end()));
+		HMAX.push_back(*max_element(H_ROI.begin(), H_ROI.end()));
 	}
 
 	if (S_ROI.size() > 0) {
-		S_MIN = *min_element(S_ROI.begin(), S_ROI.end());
-		S_MAX = *max_element(S_ROI.begin(), S_ROI.end());
+		SMIN.push_back(*min_element(S_ROI.begin(), S_ROI.end()));
+		SMAX.push_back(*max_element(S_ROI.begin(), S_ROI.end()));
 	}
 
 	if (V_ROI.size() > 0) {
-		V_MIN = *min_element(V_ROI.begin(), V_ROI.end());
-		V_MAX = *max_element(V_ROI.begin(), V_ROI.end());
+		VMIN.push_back(*min_element(V_ROI.begin(), V_ROI.end()));
+		VMAX.push_back(*max_element(V_ROI.begin(), V_ROI.end()));
 	}
 
 
@@ -88,13 +117,10 @@ void CameraInterface::extractPixelColor()
 
 
 
-Mat CameraInterface::getThreshold()
-{
-	return threshold;
-}
 
-void CameraInterface::storePixelValue(Mat hsv_pixel, int x, int y, int width, int height)
+void CameraInterface::storePixelValue(CameraImage *m, My_ROI roi, int avg[3])
 {
+	/*
 	for (int i = x; i < x + width; i++) {
 		for (int j = y; j < y + height; j++) {
 
@@ -105,7 +131,32 @@ void CameraInterface::storePixelValue(Mat hsv_pixel, int x, int y, int width, in
 		}
 
 	}
+	*/
+
+
+	Mat r;
+	roi.roi_ptr.copyTo(r);
+	vector<int>hm;
+	vector<int>sm;
+	vector<int>vm;
+	// generate vectors
+	for (int i = 2; i<r.rows - 2; i++) {
+		for (int j = 2; j<r.cols - 2; j++) {
+			H_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 0]);
+			S_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 1]);
+			V_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 2]);
+		}
+	}
+
+	extractPixelColor();
+
+	avg[0] = getMedian(H_ROI);
+	avg[1] = getMedian(S_ROI);
+	avg[2] = getMedian(V_ROI);
+	
 }
+
+
 
 void CameraInterface::morphologicalErode(Mat &thres, int &E_MIN)
 {
@@ -140,15 +191,19 @@ void CameraInterface::palmPixExt(CameraImage *m)
 	roi.push_back(My_ROI(Point(m->src.cols / 2.5, m->src.rows / 1.8), Point(m->src.cols / 2.5 + square_len, m->src.rows / 1.8 + square_len), m->src));
 
 
-	for (;;) {
+	for (int i = 0; i<30; i++) {
+		m->cap->read(m->src);
+		flip(m->src, m->src, 1);
 		for (int j = 0; j<NSAMPLES; j++) {
 			roi[j].draw_rectangle(m->src);
 		}
-		string imgText = string("Cover rectangles with palm and press enter");
+		string imgText = string("Cover rectangles with palm and press F");
 		printText(m->src, imgText);
 		showVideo(m->src, "getvalue");
 		if (waitKey(30) == char('f')) break;
 	}
+
+	destroyWindow("getvalue");
 
 
 
@@ -158,4 +213,54 @@ void CameraInterface::printText(Mat src, string text) {
 	int fontFace = FONT_HERSHEY_PLAIN;
 	putText(src, text, Point(src.cols / 2, src.rows / 10), fontFace, 1.2f, Scalar(200, 0, 0), 2);
 }
+
+void CameraInterface::average(CameraImage *m) {
+	for (int i = 0; i<15; i++) {
+		m->cap->read(m->src);
+		flip(m->src, m->src, 1);
+		cvtColor(m->src, m->src, CV_BGR2HSV);
+		for (int j = 0; j<NSAMPLES; j++) {
+			//Rect* rectangleROI = &roi[j].draw_rectangle(m->src);
+			//getAvgColor(m, roi[j], avgColor[j], rectangleROI);
+			roi[j].draw_rectangle(m->src);
+			storePixelValue(m, roi[j], avgColor[j]);
+		}
+
+	
+
+		cvtColor(m->src, m->src, CV_HSV2BGR);
+		string imgText = string("Finding average color of hand");
+		printText(m->src, imgText);
+		showVideo(m->src, "img1");
+		if (cv::waitKey(30) == char("z")) break;
+	}
+
+	destroyWindow("img1");
+}
+/*/
+void CameraInterface::getAvgColor(CameraImage *m, My_ROI roi, int avg[3], Rect* rectangleROI) {
+	storePixelValue(m->src, rectangleROI->x, rectangleROI->y, rectangleROI->width, rectangleROI->height);
+	extractPixelColor();
+	avg[0] = getMedian(H_ROI);
+	avg[1] = getMedian(S_ROI);
+	avg[2] = getMedian(V_ROI);
+}
+
+*/
+
+int CameraInterface::getMedian(vector<int> val) {
+	int median;
+	size_t size = val.size();
+	sort(val.begin(), val.end());
+	if (size % 2 == 0) {
+		median = val[size / 2 - 1];
+	}
+	else {
+		median = val[size / 2];
+	}
+	return median;
+}
+
+
+
 
