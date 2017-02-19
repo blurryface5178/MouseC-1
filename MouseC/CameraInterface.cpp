@@ -14,6 +14,15 @@ using namespace std;
 
 CameraInterface::CameraInterface() {
 
+	for (int i = 0; i<NSAMPLES; i++) {
+		c_lower[i][0] = 12;
+		c_upper[i][0] = 7;
+		c_lower[i][1] = 30;
+		c_upper[i][1] = 40;
+		c_lower[i][2] = 80;
+		c_upper[i][2] = 80;
+	}
+
 }
 
 
@@ -31,16 +40,60 @@ CameraInterface::~CameraInterface()
 
 
 
-
+void CameraInterface::normalizeColors(CameraImage * myImage){
+	// copy all boundries read from trackbar
+	// to all of the different boundries
+	for(int i=1;i<NSAMPLES;i++){
+		for(int j=0;j<3;j++){
+			c_lower[i][j]=c_lower[0][j];	
+			c_upper[i][j]=c_upper[0][j];	
+		}	
+	}
+	// normalize all boundries so that 
+	// threshold is whithin 0-255
+	for(int i=0;i<NSAMPLES;i++){
+		if((avgColor[i][0]-c_lower[i][0]) <0){
+			c_lower[i][0] = avgColor[i][0] ;
+		}if((avgColor[i][1]-c_lower[i][1]) <0){
+			c_lower[i][1] = avgColor[i][1] ;
+		}if((avgColor[i][2]-c_lower[i][2]) <0){
+			c_lower[i][2] = avgColor[i][2] ;
+		}if((avgColor[i][0]+c_upper[i][0]) >255){ 
+			c_upper[i][0] = 255-avgColor[i][0] ;
+		}if((avgColor[i][1]+c_upper[i][1]) >255){
+			c_upper[i][1] = 255-avgColor[i][1] ;
+		}if((avgColor[i][2]+c_upper[i][2]) >255){
+			c_upper[i][2] = 255-avgColor[i][2] ;
+		}
+	}
+}
 
 void CameraInterface::BGRtoHSV(CameraImage *m) {
+	
+	Scalar hlslowerBound, hsvlowerBound;
+	Scalar hlsupperBound, hsvupperBound;
+	Mat foo;
+	for (int i = 0; i<NSAMPLES; i++) {
+		normalizeColors(m);
+		hlslowerBound = Scalar(avgColor[i][0] - c_lower[i][0], avgColor[i][1] - c_lower[i][1], avgColor[i][2] - c_lower[i][2]);
+		hlsupperBound = Scalar(avgColor[i][0] + c_upper[i][0], avgColor[i][1] + c_upper[i][1], avgColor[i][2] + c_upper[i][2]);
+		hsvlowerBound = Scalar(HMIN[i],SMIN[i], VMIN[i]);
+		hsvupperBound = Scalar(HMAX[i],SMAX[i], VMAX[i]);
+		inRange(m->srcLR, hlslowerBound, hlsupperBound, thresholds[0]);
+		inRange(m->srcLR, hsvlowerBound, hsvupperBound, thresholds[1]);
+		threshold = thresholds[0] + thresholds[1];
+
+		channels.push_back(threshold);
+	}
+	
+	/*
 	for (int i = 0; i < NSAMPLES; i++)
 	{
-		inRange(m->srcLR, Scalar(HMIN[i], SMIN[i], VMIN[i]), Scalar(HMAX[i], SMAX[i], VMAX[i]), threshold);
+		inRange(m->srcLR, Scalar(avgColor[i][0]	-20, avgColor[i][1]-20, avgColor[i][2]-20), Scalar(avgColor[i][0], avgColor[i][1], avgColor[i][2]), threshold);
 		channels.push_back(threshold);
 		//cout << HMIN[i]<<"," << SMIN[i]<<"," << VMIN[i]<<","<< HMAX[i]<<","<< SMAX[i]<<","<< VMAX[i];
 	}
-	
+	*/
   mergeData(channels, m);
 }
 
@@ -55,6 +108,7 @@ void CameraInterface::mergeData(vector<Mat> thres, CameraImage *m) {
 		m->bw += thres[i];
 	}
 
+	medianBlur(m->bw, m->bw, 7);
 	
 	for (int i = 0; i < 3; i++) {
 		m->bwList.push_back(m->bw);
@@ -136,9 +190,7 @@ void CameraInterface::storePixelValue(CameraImage *m, My_ROI roi, int avg[3])
 
 	Mat r;
 	roi.roi_ptr.copyTo(r);
-	vector<int>hm;
-	vector<int>sm;
-	vector<int>vm;
+
 	// generate vectors
 	for (int i = 2; i<r.rows - 2; i++) {
 		for (int j = 2; j<r.cols - 2; j++) {
@@ -163,7 +215,7 @@ void CameraInterface::morphologicalErode(Mat &thres, int &E_MIN)
 	erode(thres, thres, getStructuringElement(MORPH_ELLIPSE, Size(E_MIN + 1, E_MIN + 1)));
 }
 
-void CameraInterface::morphologicalDilate(Mat & thres, int &D_MIN)
+void CameraInterface::morphologicalDilate(Mat & thres, int D_MIN)
 {
 	dilate(thres, thres, getStructuringElement(MORPH_ELLIPSE, Size(D_MIN + 1, D_MIN + 1)));
 }
@@ -191,9 +243,9 @@ void CameraInterface::palmPixExt(CameraImage *m)
 	roi.push_back(My_ROI(Point(m->src.cols / 2.5, m->src.rows / 1.8), Point(m->src.cols / 2.5 + square_len, m->src.rows / 1.8 + square_len), m->src));
 
 
-	for (int i = 0; i<30; i++) {
+	for (int i = 0; i<100; i++) {
 		m->cap->read(m->src);
-		flip(m->src, m->src, 1);
+		//flip(m->src, m->src, 1);
 		for (int j = 0; j<NSAMPLES; j++) {
 			roi[j].draw_rectangle(m->src);
 		}
@@ -217,7 +269,7 @@ void CameraInterface::printText(Mat src, string text) {
 void CameraInterface::average(CameraImage *m) {
 	for (int i = 0; i<15; i++) {
 		m->cap->read(m->src);
-		flip(m->src, m->src, 1);
+		//flip(m->src, m->src, 1);
 		cvtColor(m->src, m->src, CV_BGR2HSV);
 		for (int j = 0; j<NSAMPLES; j++) {
 			//Rect* rectangleROI = &roi[j].draw_rectangle(m->src);

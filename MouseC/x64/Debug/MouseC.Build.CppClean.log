@@ -1,10 +1,14 @@
 g:\projets\visualprojects\mousec\mousec\x64\debug\vc140.pdb
 g:\projets\visualprojects\mousec\mousec\x64\debug\vc140.idb
-g:\projets\visualprojects\mousec\mousec\x64\debug\camerainterface.obj
 g:\projets\visualprojects\mousec\mousec\x64\debug\mousecmain.obj
-g:\projets\visualprojects\mousec\x64\debug\mousec.pdb
-g:\projets\visualprojects\mousec\x64\debug\mousec.exe
+g:\projets\visualprojects\mousec\mousec\x64\debug\camerainterface.obj
+g:\projets\visualprojects\mousec\mousec\x64\debug\handdetection.obj
+g:\projets\visualprojects\mousec\mousec\x64\debug\extcont.obj
+g:\projets\visualprojects\mousec\mousec\x64\debug\my_roi.obj
+g:\projets\visualprojects\mousec\mousec\x64\debug\cameraimage.obj
 g:\projets\visualprojects\mousec\x64\debug\mousec.ilk
+g:\projets\visualprojects\mousec\x64\debug\mousec.exe
+g:\projets\visualprojects\mousec\x64\debug\mousec.pdb
 g:\projets\visualprojects\mousec\mousec\x64\debug\mousec.tlog\cl.command.1.tlog
 g:\projets\visualprojects\mousec\mousec\x64\debug\mousec.tlog\cl.read.1.tlog
 g:\projets\visualprojects\mousec\mousec\x64\debug\mousec.tlog\cl.write.1.tlog

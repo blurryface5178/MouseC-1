@@ -53,11 +53,13 @@ private:
 	VideoCapture *cap = new VideoCapture;
 
 	Mat hsv, threshold;
+	Mat thresholds[2];
 	vector<Mat> channels;
 	Mat croppedImage;
 	vector<My_ROI> roi;
 	Mat result;
-	
+	int c_lower[NSAMPLES][3];
+	int c_upper[NSAMPLES][3];
 
 
 
@@ -70,7 +72,7 @@ public:
 	void createTrackBars();
 	void extractPixelColor();
 	void morphologicalErode(Mat &thres, int &);
-	void morphologicalDilate(Mat &thres, int &);
+	void morphologicalDilate(Mat &thres, int);
 	void storePixelValue(CameraImage *m, My_ROI roi, int avg[3]);
 	void showVideo(Mat, String);
 	void createBlur(Mat&, int);
@@ -86,7 +88,7 @@ private:
 	void getAvgColor(CameraImage*, My_ROI, int[], Rect*);
 	int getMedian(vector<int>);
 	void mergeData(vector<Mat>, CameraImage *);
-	
+	void normalizeColors(CameraImage * myImage);
 
 };
 
