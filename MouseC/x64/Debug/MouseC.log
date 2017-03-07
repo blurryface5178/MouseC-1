@@ -1,18 +1,8 @@
-﻿  MouseCMain.cpp
-  CameraInterface.cpp
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(239): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+﻿  CameraInterface.cpp
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(238): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(240): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(241): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(242): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(243): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(287): warning C4302: '<function-style-cast>': truncation from 'const char *' to 'char'
-  Generating Code...
-  Compiling...
-  extCont.cpp
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(115): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(116): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(117): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  HandDetection.cpp
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(286): warning C4302: '<function-style-cast>': truncation from 'const char *' to 'char'
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)

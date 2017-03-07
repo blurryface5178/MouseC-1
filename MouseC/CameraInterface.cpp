@@ -82,7 +82,6 @@ void CameraInterface::BGRtoHSV(CameraImage *m) {
 		inRange(m->srcLR, hlslowerBound, hlsupperBound, thresholds[0]);
 		inRange(m->srcLR, hsvlowerBound, hsvupperBound, thresholds[1]);
 		threshold = thresholds[0] + thresholds[1];
-
 		channels.push_back(threshold);
 	}
 	
@@ -115,8 +114,8 @@ void CameraInterface::mergeData(vector<Mat> thres, CameraImage *m) {
 	}
 
 
-	merge(m->bwList, result);
-	
+	//merge(m->bwList, result);
+	result = m->bw;
 	m->bwList.clear();
 
 }
@@ -243,7 +242,7 @@ void CameraInterface::palmPixExt(CameraImage *m)
 	roi.push_back(My_ROI(Point(m->src.cols / 2.5, m->src.rows / 1.8), Point(m->src.cols / 2.5 + square_len, m->src.rows / 1.8 + square_len), m->src));
 
 
-	for (int i = 0; i<100; i++) {
+	for (int i = 0; i<40; i++) {
 		m->cap->read(m->src);
 		//flip(m->src, m->src, 1);
 		for (int j = 0; j<NSAMPLES; j++) {
@@ -284,7 +283,7 @@ void CameraInterface::average(CameraImage *m) {
 		string imgText = string("Finding average color of hand");
 		printText(m->src, imgText);
 		showVideo(m->src, "img1");
-		if (cv::waitKey(30) == char("z")) break;
+		if (cv::waitKey(30) == char("z")) break; 
 	}
 
 	destroyWindow("img1");

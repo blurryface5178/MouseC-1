@@ -1,5 +1,7 @@
 #pragma once
 #include"CameraInterface.h"
+#include"CameraImage.h"
+
 #include<opencv2\opencv.hpp>
 #include<opencv2\imgproc\imgproc.hpp>
 #include<opencv2\highgui\highgui.hpp>
@@ -31,14 +33,17 @@ private:
 
 public:
 	extCont();
-	void beginExt(Mat, CameraInterface*);
+	extCont(Mat);
+	void beginExt(Mat,Mat, CameraInterface*);
+	
 	void showVideo();
 	String getText();
-	~extCont();
 	void dispose();
+	void findingContours(Mat,Mat);
+	~extCont();
+
 
 private:
 	void createTrack();
-	void findingContours();
 };
 

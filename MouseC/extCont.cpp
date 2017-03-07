@@ -1,5 +1,6 @@
 #include"extCont.h"
 #include"CameraInterface.h"
+#include"CameraImage.h"
 #include<opencv2\opencv.hpp>
 #include<opencv2\imgproc\imgproc.hpp>
 #include<opencv2\highgui\highgui.hpp>
@@ -16,24 +17,25 @@ extCont::extCont()
 
 }
 
-void extCont::beginExt(Mat src, CameraInterface *cI)
+void extCont::beginExt(Mat src,Mat thresholdvalue, CameraInterface *cI)
 {
 	this->cI = cI;
 	extSrc = src;
-	extROI = cI->ROI(&extSrc, 260, 10, 250, 250);
-	cvtColor(extROI, gray_scale, CV_RGB2GRAY);
-	cI->createBlur(gray_scale, B_MIN);
-	threshold(gray_scale, gray_threshold, T_MIN, T_MAX, THRESH_BINARY_INV + THRESH_OTSU);
-	cI->morphologicalErode(gray_threshold, E_MIN);
-	cI->morphologicalDilate(gray_threshold, D_MIN);
-	findingContours();
+	//extROI = cI->ROI(&extSrc, 260, 10, 250, 250);
+	//cvtColor(extROI, gray_scale, CV_RGB2GRAY);
+	//cI->createBlur(gray_scale, B_MIN);
+	//threshold(gray_scale, gray_threshold, T_MIN, T_MAX, THRESH_BINARY_INV + THRESH_OTSU);
+	//gray_threshold = thresholdvalue;
+	//cI->morphologicalErode(gray_threshold, E_MIN);
+	//cI->morphologicalDilate(gray_threshold, D_MIN);
+	//findingContours();
 }
 
 void extCont::showVideo()
 {
 	cI->showVideo(extSrc, "ORIGINAL");
-	cI->showVideo(extROI, "Region of Interest");
-	cI->showVideo(gray_scale, "gray");
+	//cI->showVideo(extROI, "Region of Interest");
+	//cI->showVideo(gray_scale, "gray");
 	cI->showVideo(gray_threshold, "threshold");
 }
 
@@ -58,8 +60,11 @@ void extCont::createTrack()
 	createTrackbar("DILATE", "trackbar", &D_MIN, D_MAX);
 }
 
-void extCont::findingContours()
+void extCont::findingContours(Mat gray_threshold, Mat src)
 {
+	flip(src, src, 1);
+	this->extSrc = src;
+	this->gray_threshold = gray_threshold;
 	findContours(gray_threshold, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point());
 	if (contours.size() > 0) {
 		size_t indexOfBiggestContour = -1;
@@ -97,7 +102,7 @@ void extCont::findingContours()
 							int p_end = defects[i][k][1];
 							int p_far = defects[i][k][2];
 							defectPoint[i].push_back(contours[i][p_far]);
-							circle(extROI, contours[i][p_end], 3, Scalar(0, 255, 0), 2);
+							circle(extSrc, contours[i][p_end], 3, Scalar(0, 255, 0), 2);
 							count++;
 						}
 
@@ -114,13 +119,13 @@ void extCont::findingContours()
 					putText(extSrc, a, Point(70, 70), CV_FONT_HERSHEY_SIMPLEX, 2, Scalar(255, 0, 0), 2, 8, false);
 					drawContours(gray_threshold, contours, i, Scalar(255, 255, 0), 2, 8, vector<Vec4i>(), 0, Point());
 					drawContours(gray_threshold, hullPoint, i, Scalar(255, 255, 0), 1, 8, vector<Vec4i>(), 0, Point());
-					drawContours(extROI, hullPoint, i, Scalar(0, 0, 255), 2, 8, vector<Vec4i>(), 0, Point());
+					//drawContours(extSrc, hullPoint, i, Scalar(0, 0, 255), 2, 8, vector<Vec4i>(), 0, Point());
 					approxPolyDP(contours[i], contours_poly[i], 3, false);
 					boundRect[i] = boundingRect(contours_poly[i]);
-					rectangle(extROI, boundRect[i].tl(), boundRect[i].br(), Scalar(255, 0, 0), 2, 8, 0);
+					//rectangle(extSrc, boundRect[i].tl(), boundRect[i].br(), Scalar(255, 0, 0), 2, 8, 0);
 					minRect[i].points(rect_point);
 					for (size_t k = 0; k < 4; k++) {
-						line(extROI, rect_point[k], rect_point[(k + 1) % 4], Scalar(0, 255, 0), 2, 8);
+						line(extSrc, rect_point[k], rect_point[(k + 1) % 4], Scalar(0, 255, 0), 2, 8);
 					}
 
 				}
@@ -131,7 +136,7 @@ void extCont::findingContours()
 	
 	}
 	
-
+	
 
 }
 
