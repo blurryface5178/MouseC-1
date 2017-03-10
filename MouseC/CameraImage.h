@@ -11,6 +11,7 @@ class CameraImage
 public:
 	CameraImage();
 	CameraImage(int,int,int,int);
+	CameraImage(int);
 	Mat src;
 	Mat srcLR;
 	Mat bw;

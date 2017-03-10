@@ -22,6 +22,11 @@ CameraImage::CameraImage(int videoCameraid, int frame_width, int frame_height,in
 	flip(src, src, 180);
 
 }
+CameraImage::CameraImage(int videoid) {
+	cap->open(videoid);
+	cap->read(src);
+	flip(src, src, 1);
+}
 
 
 CameraImage::~CameraImage()

@@ -14,14 +14,7 @@ using namespace std;
 
 CameraInterface::CameraInterface() {
 
-	for (int i = 0; i<NSAMPLES; i++) {
-		c_lower[i][0] = 12;
-		c_upper[i][0] = 7;
-		c_lower[i][1] = 30;
-		c_upper[i][1] = 40;
-		c_lower[i][2] = 80;
-		c_upper[i][2] = 80;
-	}
+
 
 }
 
@@ -68,7 +61,7 @@ void CameraInterface::normalizeColors(CameraImage * myImage){
 	}
 }
 
-void CameraInterface::BGRtoHSV(CameraImage *m) {
+void CameraInterface::BGRtoHSL(CameraImage *m) {
 	
 	Scalar hlslowerBound, hsvlowerBound;
 	Scalar hlsupperBound, hsvupperBound;
@@ -77,23 +70,21 @@ void CameraInterface::BGRtoHSV(CameraImage *m) {
 		normalizeColors(m);
 		hlslowerBound = Scalar(avgColor[i][0] - c_lower[i][0], avgColor[i][1] - c_lower[i][1], avgColor[i][2] - c_lower[i][2]);
 		hlsupperBound = Scalar(avgColor[i][0] + c_upper[i][0], avgColor[i][1] + c_upper[i][1], avgColor[i][2] + c_upper[i][2]);
-		hsvlowerBound = Scalar(HMIN[i],SMIN[i], VMIN[i]);
-		hsvupperBound = Scalar(HMAX[i],SMAX[i], VMAX[i]);
-		inRange(m->srcLR, hlslowerBound, hlsupperBound, thresholds[0]);
-		inRange(m->srcLR, hsvlowerBound, hsvupperBound, thresholds[1]);
-		threshold = thresholds[0] + thresholds[1];
+		//hsvlowerBound = Scalar(HMIN[i],SMIN[i], LMIN[i]);
+		//hsvupperBound = Scalar(HMAX[i],SMAX[i], LMAX[i]);
+		inRange(m->srcLR, hlslowerBound, hlsupperBound, threshold);
+		//inRange(m->srcLR, hsvlowerBound, hsvupperBound, thresholds[1]);
+		//threshold = thresholds[0] + thresholds[1];
 		channels.push_back(threshold);
 	}
 	
-	/*
-	for (int i = 0; i < NSAMPLES; i++)
-	{
-		inRange(m->srcLR, Scalar(avgColor[i][0]	-20, avgColor[i][1]-20, avgColor[i][2]-20), Scalar(avgColor[i][0], avgColor[i][1], avgColor[i][2]), threshold);
-		channels.push_back(threshold);
-		//cout << HMIN[i]<<"," << SMIN[i]<<"," << VMIN[i]<<","<< HMAX[i]<<","<< SMAX[i]<<","<< VMAX[i];
-	}
-	*/
+	
   mergeData(channels, m);
+}
+
+void CameraInterface::initWindows() {
+	namedWindow("trackbars", CV_WINDOW_KEEPRATIO);
+
 }
 
 
@@ -133,20 +124,8 @@ Mat CameraInterface::ROI(Mat *roiSrc, int x, int y, int width, int height)
 	return croppedImage;
 }
 
-void CameraInterface::createTrackBars()
-{
-	namedWindow(trackbarWindowName, WINDOW_FREERATIO);
 
-	createTrackbar("H_MIN", trackbarWindowName, &H_MIN, 255);
-	createTrackbar("H_MAX", trackbarWindowName, &H_MAX, 255);
-	createTrackbar("S_MIN", trackbarWindowName, &S_MIN, 255);
-	createTrackbar("S_MAX", trackbarWindowName, &S_MAX, 255);
-	createTrackbar("V_MIN", trackbarWindowName, &V_MIN, 255);
-	createTrackbar("V_MAX", trackbarWindowName, &V_MAX, 255);
-	createTrackbar("ERODE", trackbarWindowName, &ERODEMIN, ERODEMAX);
-	createTrackbar("DILATE", trackbarWindowName, &DILATEMIN, DILATEMAX);
-}
-
+/*
 void CameraInterface::extractPixelColor()
 {
 	if (H_ROI.size() > 0) {
@@ -168,6 +147,7 @@ void CameraInterface::extractPixelColor()
 
 }
 
+*/
 
 
 
@@ -195,15 +175,15 @@ void CameraInterface::storePixelValue(CameraImage *m, My_ROI roi, int avg[3])
 		for (int j = 2; j<r.cols - 2; j++) {
 			H_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 0]);
 			S_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 1]);
-			V_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 2]);
+			L_ROI.push_back(r.data[r.channels()*(r.cols*i + j) + 2]);
 		}
 	}
 
-	extractPixelColor();
+	//extractPixelColor();
 
 	avg[0] = getMedian(H_ROI);
 	avg[1] = getMedian(S_ROI);
-	avg[2] = getMedian(V_ROI);
+	avg[2] = getMedian(L_ROI);
 	
 }
 
@@ -244,7 +224,7 @@ void CameraInterface::palmPixExt(CameraImage *m)
 
 	for (int i = 0; i<40; i++) {
 		m->cap->read(m->src);
-		//flip(m->src, m->src, 1);
+		flip(m->src, m->src, 1);
 		for (int j = 0; j<NSAMPLES; j++) {
 			roi[j].draw_rectangle(m->src);
 		}
@@ -254,11 +234,28 @@ void CameraInterface::palmPixExt(CameraImage *m)
 		if (waitKey(30) == char('f')) break;
 	}
 
-	destroyWindow("getvalue");
 
 
 
 }
+
+void CameraInterface::initTrackbars() {
+	for (int i = 0; i<NSAMPLES; i++) {
+		c_lower[i][0] = 12;
+		c_upper[i][0] = 7;
+		c_lower[i][1] = 30;
+		c_upper[i][1] = 40;
+		c_lower[i][2] = 80;
+		c_upper[i][2] =  80;
+	}
+	createTrackbar("lower1", "trackbars", &c_lower[0][0], 255);
+	createTrackbar("lower2", "trackbars", &c_lower[0][1], 255);
+	createTrackbar("lower3", "trackbars", &c_lower[0][2], 255);
+	createTrackbar("upper1", "trackbars", &c_upper[0][0], 255);
+	createTrackbar("upper2", "trackbars", &c_upper[0][1], 255);
+	createTrackbar("upper3", "trackbars", &c_upper[0][2], 255);
+}
+
 
 void CameraInterface::printText(Mat src, string text) {
 	int fontFace = FONT_HERSHEY_PLAIN;
@@ -268,8 +265,8 @@ void CameraInterface::printText(Mat src, string text) {
 void CameraInterface::average(CameraImage *m) {
 	for (int i = 0; i<15; i++) {
 		m->cap->read(m->src);
-		//flip(m->src, m->src, 1);
-		cvtColor(m->src, m->src, CV_BGR2HSV);
+		flip(m->src, m->src, 1);
+		cvtColor(m->src, m->src, CV_BGR2HLS);
 		for (int j = 0; j<NSAMPLES; j++) {
 			//Rect* rectangleROI = &roi[j].draw_rectangle(m->src);
 			//getAvgColor(m, roi[j], avgColor[j], rectangleROI);
@@ -278,12 +275,11 @@ void CameraInterface::average(CameraImage *m) {
 		}
 
 	
-
-		cvtColor(m->src, m->src, CV_HSV2BGR);
+		cvtColor(m->src, m->src, CV_HLS2BGR);
 		string imgText = string("Finding average color of hand");
 		printText(m->src, imgText);
-		showVideo(m->src, "img1");
-		if (cv::waitKey(30) == char("z")) break; 
+		showVideo(m->src, "getvalue");
+		if (waitKey(30) == char("z")) break; 
 	}
 
 	destroyWindow("img1");

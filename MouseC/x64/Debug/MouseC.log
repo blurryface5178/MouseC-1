@@ -1,8 +1,3 @@
-﻿  CameraInterface.cpp
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(238): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(240): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(241): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(242): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(286): warning C4302: '<function-style-cast>': truncation from 'const char *' to 'char'
+﻿  MouseCMain.cpp
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)

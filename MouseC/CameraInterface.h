@@ -27,10 +27,10 @@ private:
 	int frame_rate = 5;
 	int H_MIN = 0;
 	int S_MIN = 0;
-	int V_MIN = 0;
+	int L_MIN = 0;
 	int H_MAX = 256;
 	int S_MAX = 256;
-	int V_MAX = 256;
+	int L_MAX = 256;
 	int ERODEMAX = 21;
 	int ERODEMIN = 0;
 	int DILATEMIN = 0;
@@ -38,14 +38,14 @@ private:
 	int INTERESTNUM = 7;
 	vector<int> HMIN; 
 	vector<int> SMIN;
-	vector<int> VMIN;
+	vector<int> LMIN;
 	vector<int> HMAX;
 	vector<int> SMAX;
-	vector<int> VMAX;
+	vector<int> LMAX;
 
 	vector<int> H_ROI;
 	vector<int> S_ROI;
-	vector<int> V_ROI;
+	vector<int> L_ROI;
 	
 	const String trackbarWindowName = "Trackbar";
 	const int square_len = 20;
@@ -69,8 +69,7 @@ public:
 	~CameraInterface();
 
 	Mat ROI(Mat*, int, int, int, int);
-	void createTrackBars();
-	void extractPixelColor();
+
 	void morphologicalErode(Mat &thres, int &);
 	void morphologicalDilate(Mat &thres, int);
 	void storePixelValue(CameraImage *m, My_ROI roi, int avg[3]);
@@ -80,12 +79,12 @@ public:
 	void palmPixExt(CameraImage *);
 	Mat getMergedData();
 	void average(CameraImage*);
-	void BGRtoHSV(CameraImage*);
-
+	void BGRtoHSL(CameraImage*);
+	void initTrackbars();
+	void initWindows();
 
 
 private:
-	void getAvgColor(CameraImage*, My_ROI, int[], Rect*);
 	int getMedian(vector<int>);
 	void mergeData(vector<Mat>, CameraImage *);
 	void normalizeColors(CameraImage * myImage);
