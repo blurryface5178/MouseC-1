@@ -65,7 +65,7 @@ void extCont::findingContours(Mat gray_threshold, Mat src)
 	flip(src, src, 1);
 	this->extSrc = src;
 	this->gray_threshold = gray_threshold;
-	findContours(gray_threshold, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE, Point());
+	findContours(gray_threshold, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE, Point());
 	if (contours.size() > 0) {
 		size_t indexOfBiggestContour = -1;
 		size_t sizeOfBiggestContour = 0;
@@ -109,12 +109,7 @@ void extCont::findingContours(Mat gray_threshold, Mat src)
 					}
 
 
-					if (count == 1 || count == 2 || count == 3)
-						strcpy(a, "Scissor");
-					else if (count == 4 || count == 5)
-						strcpy(a, "Paper ");
-					else
-						strcpy(a, "Rock BaBy");
+					
 
 					putText(extSrc, a, Point(70, 70), CV_FONT_HERSHEY_SIMPLEX, 2, Scalar(255, 0, 0), 2, 8, false);
 					drawContours(gray_threshold, contours, i, Scalar(255, 255, 0), 2, 8, vector<Vec4i>(), 0, Point());
@@ -127,6 +122,18 @@ void extCont::findingContours(Mat gray_threshold, Mat src)
 					for (size_t k = 0; k < 4; k++) {
 						line(extSrc, rect_point[k], rect_point[(k + 1) % 4], Scalar(0, 255, 0), 2, 8);
 					}
+					int middlex = (boundRect[i].x + boundRect[i].width) / 2;
+					int middley = (boundRect[i].y + boundRect[i].height) / 2;
+
+					circle(extSrc, Point(middlex,middley),boundRect[i].height/2,Scalar(0, 255, 0), 2);
+					if (boundRect[i].height - 6 < boundRect[i].width) {
+						strcpy(a, "Rock BaBy");
+					}else if(count == 1 || count == 2 || count == 3)
+						strcpy(a, "Scissor");
+					else if (count == 4 || count == 5)
+						strcpy(a, "Paper ");
+					else
+						strcpy(a, "Rock BaBy");
 
 				}
 			}

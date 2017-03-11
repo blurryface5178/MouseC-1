@@ -38,14 +38,16 @@ private:
 	int INTERESTNUM = 7;
 	vector<int> HMIN; 
 	vector<int> SMIN;
-	vector<int> LMIN;
+	vector<int> VMIN;
 	vector<int> HMAX;
 	vector<int> SMAX;
-	vector<int> LMAX;
+	vector<int> VMAX;
 
 	vector<int> H_ROI;
 	vector<int> S_ROI;
 	vector<int> L_ROI;
+
+	vector<int> h_roi, s_roi, v_roi;
 	
 	const String trackbarWindowName = "Trackbar";
 	const int square_len = 20;
@@ -69,7 +71,8 @@ public:
 	~CameraInterface();
 
 	Mat ROI(Mat*, int, int, int, int);
-
+	void createTrackBars();
+	void extractPixelColor();
 	void morphologicalErode(Mat &thres, int &);
 	void morphologicalDilate(Mat &thres, int);
 	void storePixelValue(CameraImage *m, My_ROI roi, int avg[3]);

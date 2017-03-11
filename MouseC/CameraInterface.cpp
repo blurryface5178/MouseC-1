@@ -70,8 +70,8 @@ void CameraInterface::BGRtoHSL(CameraImage *m) {
 		normalizeColors(m);
 		hlslowerBound = Scalar(avgColor[i][0] - c_lower[i][0], avgColor[i][1] - c_lower[i][1], avgColor[i][2] - c_lower[i][2]);
 		hlsupperBound = Scalar(avgColor[i][0] + c_upper[i][0], avgColor[i][1] + c_upper[i][1], avgColor[i][2] + c_upper[i][2]);
-		//hsvlowerBound = Scalar(HMIN[i],SMIN[i], LMIN[i]);
-		//hsvupperBound = Scalar(HMAX[i],SMAX[i], LMAX[i]);
+		//hsvlowerBound = Scalar(HMIN[i],SMIN[i], VMIN[i]);
+		//hsvupperBound = Scalar(HMAX[i],SMAX[i], VMAX[i]);
 		inRange(m->srcLR, hlslowerBound, hlsupperBound, threshold);
 		//inRange(m->srcLR, hsvlowerBound, hsvupperBound, thresholds[1]);
 		//threshold = thresholds[0] + thresholds[1];
@@ -125,50 +125,42 @@ Mat CameraInterface::ROI(Mat *roiSrc, int x, int y, int width, int height)
 }
 
 
-/*
+
 void CameraInterface::extractPixelColor()
 {
-	if (H_ROI.size() > 0) {
-		HMIN.push_back(*min_element(H_ROI.begin(), H_ROI.end()));
-		HMAX.push_back(*max_element(H_ROI.begin(), H_ROI.end()));
+	if (h_roi.size() > 0) {
+		HMIN.push_back(*min_element(h_roi.begin(), h_roi.end()));
+		HMAX.push_back(*max_element(h_roi.begin(), h_roi.end()));
 	}
 
-	if (S_ROI.size() > 0) {
-		SMIN.push_back(*min_element(S_ROI.begin(), S_ROI.end()));
-		SMAX.push_back(*max_element(S_ROI.begin(), S_ROI.end()));
+	if (s_roi.size() > 0) {
+		SMIN.push_back(*min_element(s_roi.begin(), s_roi.end()));
+		SMAX.push_back(*max_element(s_roi.begin(), s_roi.end()));
 	}
 
-	if (V_ROI.size() > 0) {
-		VMIN.push_back(*min_element(V_ROI.begin(), V_ROI.end()));
-		VMAX.push_back(*max_element(V_ROI.begin(), V_ROI.end()));
+	if (v_roi.size() > 0) {
+		VMIN.push_back(*min_element(v_roi.begin(), v_roi.end()));
+		VMAX.push_back(*max_element(v_roi.begin(), v_roi.end()));
 	}
 
 
 
 }
 
-*/
+
 
 
 
 void CameraInterface::storePixelValue(CameraImage *m, My_ROI roi, int avg[3])
 {
-	/*
-	for (int i = x; i < x + width; i++) {
-		for (int j = y; j < y + height; j++) {
-
-			H_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[0]);
-			S_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[1]);
-			V_ROI.push_back((int)hsv_pixel.at<Vec3b>(y, x)[2]);
-
-		}
-
-	}
-	*/
 
 
 	Mat r;
 	roi.roi_ptr.copyTo(r);
+
+
+	
+
 
 	// generate vectors
 	for (int i = 2; i<r.rows - 2; i++) {
