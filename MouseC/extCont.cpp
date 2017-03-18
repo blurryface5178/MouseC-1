@@ -14,7 +14,10 @@ extCont::extCont()
 {	
 	//createTrack();
 	B_MIN = 9;
-
+	namedWindow("Accuraccy Announcement", CV_WINDOW_NORMAL);
+	rock = imread("rock.jpg");
+	paper = imread("paper.jpg");
+	scissor = imread("scissor.jpg");
 }
 
 void extCont::beginExt(Mat src,Mat thresholdvalue, CameraInterface *cI)
@@ -61,7 +64,8 @@ void extCont::createTrack()
 }
 
 void extCont::findingContours(Mat gray_threshold, Mat src)
-{
+{	
+	
 	flip(src, src, 1);
 	this->extSrc = src;
 	this->gray_threshold = gray_threshold;
@@ -127,14 +131,23 @@ void extCont::findingContours(Mat gray_threshold, Mat src)
 
 					circle(extSrc, Point(middlex,middley),boundRect[i].height/2,Scalar(0, 255, 0), 2);
 					if (boundRect[i].height - 6 < boundRect[i].width) {
+						imshow("Accuraccy Announcement", paper);
 						strcpy(a, "Rock BaBy");
-					}else if(count == 1 || count == 2 || count == 3)
-						strcpy(a, "Scissor");
-					else if (count == 4 || count == 5)
-						strcpy(a, "Paper ");
-					else
-						strcpy(a, "Rock BaBy");
+					}
+					else if (count == 1 || count == 2 || count == 3) {
 
+						imshow("Accuraccy Announcement", rock);
+						strcpy(a, "Scissor");
+					}
+					else if (count == 4 || count == 5) {
+
+						imshow("Accuraccy Announcement", scissor);
+						strcpy(a, "Paper ");
+					}
+					else {
+						imshow("Accuraccy Announcement", paper);
+						strcpy(a, "Rock BaBy");
+					}
 				}
 			}
 

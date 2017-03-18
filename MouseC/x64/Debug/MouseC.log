@@ -1,5 +1,5 @@
 ﻿  extCont.cpp
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(115): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(116): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\extcont.cpp(119): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\extcont.cpp(120): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)

@@ -18,8 +18,9 @@ CameraInterface *cI = new CameraInterface();
 
 extCont *extcont = new extCont();
 
-int main()
+int main(char** argv)
 {
+	
 	cout << "place your palm in the rectangles" << endl;
 	cI->palmPixExt(cImg);
 	cI->average(cImg);

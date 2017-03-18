@@ -17,6 +17,9 @@ private:
 	Mat gray_scale;
 	Mat gray_threshold;
 	Mat extROI;
+	Mat rock;
+	Mat paper;
+	Mat scissor;
 	int B_MIN = 0; 
 	int B_MAX =20;
 	int T_MIN = 0;
