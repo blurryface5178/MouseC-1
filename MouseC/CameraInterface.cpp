@@ -223,7 +223,7 @@ void CameraInterface::palmPixExt(CameraImage *m)
 		string imgText = string("Cover rectangles with palm and press F");
 		printText(m->src, imgText);
 		showVideo(m->src, "getvalue");
-		if (waitKey(30) == char('f')) break;
+		if (waitKey(30) == 'f') break;
 	}
 
 
@@ -255,7 +255,7 @@ void CameraInterface::printText(Mat src, string text) {
 }
 
 void CameraInterface::average(CameraImage *m) {
-	for (int i = 0; i<15; i++) {
+	for (;;) {
 		m->cap->read(m->src);
 		flip(m->src, m->src, 1);
 		cvtColor(m->src, m->src, CV_BGR2HLS);
@@ -271,7 +271,7 @@ void CameraInterface::average(CameraImage *m) {
 		string imgText = string("Finding average color of hand");
 		printText(m->src, imgText);
 		showVideo(m->src, "getvalue");
-		if (waitKey(30) == char("z")) break; 
+		if (waitKey(30) == 'z') break; 
 	}
 
 	destroyWindow("img1");

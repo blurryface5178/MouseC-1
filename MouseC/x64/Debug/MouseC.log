@@ -1,5 +1,7 @@
-﻿  extCont.cpp
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(119): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-g:\projets\visualprojects\mousec\mousec\extcont.cpp(120): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+﻿  CameraInterface.cpp
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(210): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(212): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(213): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+g:\projets\visualprojects\mousec\mousec\camerainterface.cpp(214): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.exe
   MouseC.vcxproj -> G:\projets\VisualProjects\MouseC\x64\Debug\MouseC.pdb (Full PDB)
